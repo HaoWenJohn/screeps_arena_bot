@@ -5,7 +5,8 @@ export function creep_ranged_attack_plugin(ctx) {
     ctx.my_creeps.filter(c => c.body.some(b => b.type === RANGED_ATTACK)).forEach(c => {
         let attack_target = ctx.creeps_memory[c.id].attact_target;
         if (attack_target) {
-            switch (getRange(c, attack_target)) {
+            let gap = getRange(c, attack_target)
+            switch (gap){
                 case 1:
                 case 2:
                     c.rangedMassAttack();
@@ -15,6 +16,7 @@ export function creep_ranged_attack_plugin(ctx) {
                     break;
             }
         }
+
     })
 }
 
@@ -26,7 +28,7 @@ export function creep_attack_plugin(ctx) {
         } else {
             let closest_attack_target = c.findClosestByRange(ctx.enemy_creeps);
             if (closest_attack_target && getRange(c, closest_attack_target) === 1) {
-                c.attack(closest_attack_targets);
+                c.attack(closest_attack_target);
             }
         }
     })

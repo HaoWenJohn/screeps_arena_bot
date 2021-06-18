@@ -1,6 +1,7 @@
 import {getObjectsByPrototype, getRange} from '/game/utils'
 import {Creep, Flag} from '/game/prototypes';
 import {StructureTower} from '/game/prototypes/tower'
+import {groupBy} from "./utils";
 
 export let context = {
     my_creeps: null,
@@ -17,11 +18,11 @@ export let context = {
         let creeps = groupBy(getObjectsByPrototype(Creep), function (creep) {
             return creep.my ? "my" : "enemy";
         });
-        this.my_creeps = creeps["my"];
+        this.my_creeps = creeps["my"]||[];
         this.my_creeps.forEach(c=>{
             this.creeps_memory[c.id]=this.creeps_memory[c.id] || [];
         })
-        this.enemy_creeps = creeps["enemy"];
+        this.enemy_creeps = creeps["enemy"]||[];
 
         let flags = groupBy(getObjectsByPrototype(Flag), function (flag) {
             return flag.my ? "my" : "enemy";
@@ -32,21 +33,11 @@ export let context = {
         let towers = groupBy(getObjectsByPrototype(StructureTower), function (t) {
             return t.my ? "my" : "enemy";
         })
-        this.my_towers = towers["my"];
-        this.enemy_towers = towers["enemy"];
+        this.my_towers = towers["my"]||[];
+        this.enemy_towers = towers["enemy"]||[];
 
         this.my_flag = this.my_flags[0];
         this.enemy_flag = this.enemy_flags[0];
     }
 }
 
-function groupBy(array, f) {
-    debugger;
-    const groups = {};
-    array.forEach(function (o) {
-        const group = f(o);
-        groups[group] = groups[group] || [];
-        groups[group].push(o);
-    });
-    return groups;
-}
